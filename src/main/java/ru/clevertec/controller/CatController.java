@@ -19,12 +19,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("/api/v1/cats")
 @RequiredArgsConstructor
 public class CatController {
 
     private final CatService catService;
 
-    @GetMapping("/api/v1/cats")
+    @GetMapping
     public ResponseEntity<List<Cat>> findAll() {
         List<Cat> cats = catService.getCats();
         return ResponseEntity.ok()
@@ -32,7 +33,7 @@ public class CatController {
                 .body(cats);
     }
 
-    @GetMapping("/api/v1/cats/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Cat> getCatById(@PathVariable("id") UUID id) {
         try {
             Cat cat = catService.getCatById(id);
@@ -46,17 +47,17 @@ public class CatController {
         }
     }
 
-    @PostMapping("/api/v1/cats")
+    @PostMapping
     public ResponseEntity<Cat> createCat(@RequestBody Cat cat) {
         Cat createdCat = catService.create(cat);
+
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(createdCat);
     }
 
-    @PutMapping("/api/v1/cats/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Cat> updateCat(@PathVariable("id") UUID id, @RequestBody Cat cat) {
-
         try {
             Cat updatedCat = catService.update(id, cat);
             return ResponseEntity.ok()
@@ -69,7 +70,7 @@ public class CatController {
         }
     }
 
-    @DeleteMapping("/api/v1/cats/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCat(@PathVariable("id") UUID id) {
         catService.delete(id);
         return  ResponseEntity.noContent().build();
